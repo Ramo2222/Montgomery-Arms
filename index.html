@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Montgomery Arms - Custom & Precision Optics</title>
+    <style>
+        :root {
+            --bg-main: #0b0e14;
+            --bg-card: #121824;
+            --gold-accent: #dfb260;
+            --gold-hover: #f3c272;
+            --text-light: #f4f5f7;
+            --text-muted: #9ca3af;
+            --border-subtle: rgba(223, 178, 96, 0.25);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Georgia', 'Times New Roman', serif; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-light);
+        }
+
+        /* Top Bar & Navigation */
+        header {
+            background-color: #080a0f;
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gold-accent);
+            text-decoration: none;
+            letter-spacing: 2px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-family: 'Segoe UI', sans-serif;
+            transition: color 0.2s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--gold-accent);
+            border-bottom: 2px solid var(--gold-accent);
+            padding-bottom: 4px;
+        }
+
+        /* Hero Display Section */
+        .hero-container {
+            position: relative;
+            width: 100%;
+            height: 520px;
+            background: linear-gradient(rgba(11, 14, 20, 0.4), rgba(11, 14, 20, 0.7)), url('20260807_211007.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .hero-subtext {
+            color: var(--gold-accent);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            color: #ffffff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .hero-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .btn-gold {
+            display: inline-block;
+            background-color: var(--gold-accent);
+            color: #0b0e14;
+            padding: 12px 28px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+            transition: background 0.2s;
+        }
+
+        .btn-gold:hover {
+            background-color: var(--gold-hover);
+        }
+
+        /* Features Bar */
+        .features-bar {
+            background-color: #0e121a;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 40px;
+            text-align: center;
+        }
+
+        .feature-item h4 {
+            color: var(--gold-accent);
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .feature-item p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Premier Manufacturers Section */
+        .manufacturers-section {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .manufacturers-section h3 {
+            color: var(--text-light);
+            font-size: 1rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Catalog Grid */
+        .catalog-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .search-bar-container {
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--gold-accent);
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--gold-accent);
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 3px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .product-img-box {
+            background-color: #ffffff;
+            border-radius: 4px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .product-img-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .sku-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .product-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            color: var(--text-light);
+            height: 2.6em;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold-accent);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .btn-view {
+            background-color: var(--gold-accent);
+            color: #0b0e14;
+            border: none;
+            padding: 8px 14px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .btn-view:hover {
+            background-color: var(--gold-hover);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">MONTGOMERY ARMS</a>
+        <nav>
+            <a href="#">OPTICS</a>
+            <a href="#">FIREARMS</a>
+            <a href="#">PARTS & COMPONENTS</a>
+            <a href="#">AMMUNITION</a>
+            <a href="#">TACTICAL GEAR</a>
+            <a href="#" class="active">FEATURED RELEASES</a>
+        </nav>
+    </header>
+
+    <!-- Main Hero Banner with Gun Image -->
+    <div class="hero-container">
+        <div class="hero-content">
+            <div class="hero-subtext">Custom & Precision Optics</div>
+            <h1 class="hero-title">ENGINEERED FOR SUPREMACY</h1>
+            <p class="hero-desc">Discover precision-built optic systems engineered for extreme reliability and field accuracy.</p>
+            <a href="#catalog" class="btn-gold">EXPLORE COLLECTION</a>
+        </div>
+    </div>
+
+    <!-- Features Bar -->
+    <div class="features-bar">
+        <div class="feature-item">
+            <h4>LIFETIME WARRANTY</h4>
+            <p>Guaranteed performance on all optical systems</p>
+        </div>
+        <div class="feature-item">
+            <h4>PRECISION TESTED</h4>
+            <p>Factory verified for zero and field-tested quality</p>
+        </div>
+        <div class="feature-item">
+            <h4>SECURE CHECKOUT</h4>
+            <p>Encrypted military-grade transaction safety</p>
+        </div>
+    </div>
+
+    <!-- Premier Manufacturers & Catalog Section -->
+    <div class="manufacturers-section" id="catalog">
+        <h3>PREMIER MANUFACTURERS</h3>
+
+        <div class="catalog-container">
+            <div class="search-bar-container">
+                <input type="text" id="catalog-search" class="search-input" placeholder="Search catalog by SKU, brand, or model...">
+            </div>
+
+            <div id="product-grid" class="catalog-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { 
+                sku: "CMMG22BA6AE", 
+                title: "CMMG, AR Conversion Kit, 22LR", 
+                price: "$183.94", 
+                category: "Accessories",
+                image: "https://cmmg.com/media/catalog/product/2/2/22ba6ae_1.jpg"
+            },
+            { 
+                sku: "HSEPS-CARRY-GR-MRS", 
+                title: "H-SUN EPS CARRY MRS GRN SOLAR ALUM", 
+                price: "$373.66", 
+                category: "Optics" 
+            },
+            { sku: "EO552", title: "EOTech, 552 Holo Sight", price: "$564.32", category: "Optics" },
+            { sku: "HSAEMS-211301", title: "AEMS SOLAR RED", price: "$347.59", category: "Optics" },
+            { sku: "HSAEMS-PRO-X2-RD", title: "Holosun Technologies, AEMS X2 Pro, Red Dot", price: "$347.59", category: "Optics" },
+            { sku: "HSARO-GD2", title: "H-SUN ARO ENCLOSED GLD 2MOA SIGHT", price: "$121.43", category: "Optics" },
+            { sku: "HSARO-GR2", title: "H-SUN ARO ENCLOSED GRN 2MOA SIGHT", price: "$129.02", category: "Optics" },
+            { sku: "MGMPI233BLK", title: "MAGPUL PMAG M3 5.56 40RD BLK", price: "$17.02", category: "Magazines" },
+            { sku: "SFM340C-BK-PRO", title: "SUREFIRE M340C SCOUT PRO 500 LUM BLK", price: "$255.64", category: "Lights" }
+        ];
+
+        function renderProducts(items) {
+            const grid = document.getElementById('product-grid');
+            if (!grid) return;
+            grid.innerHTML = items.map((p) => {
+                const imgSrc = p.image ? p.image : `images/${p.sku}/000001.jpg`;
+                return `
+                    <div class="product-card" onclick="window.location.href='product-detail.html?sku=${p.sku}'">
+                        <span class="stock-badge">IN STOCK</span>
+                        <div class="product-img-box">
+                            <img src="${imgSrc}" 
+                                 alt="${p.title}" 
+                                 onerror="this.src='https://placehold.co/250x200/121824/ffffff?text=Montgomery+Arms';">
+                        </div>
+                        <span class="sku-label">SKU: ${p.sku}</span>
+                        <h3 class="product-title">${p.title}</h3>
+                        <div class="product-bottom">
+                            <span class="product-price">${p.price}</span>
+                            <button class="btn-view" onclick="event.stopPropagation(); window.location.href='product-detail.html?sku=${p.sku}';">
+                                VIEW DETAILS
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('catalog-search').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = products.filter(p => 
+                p.title.toLowerCase().includes(term) || p.sku.toLowerCase().includes(term)
+            );
+            renderProducts(filtered);
+        });
+
+        renderProducts(products);
+    </script>
+</body>
+</html>

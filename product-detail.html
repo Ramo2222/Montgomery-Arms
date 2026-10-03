@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Montgomery Arms</title>
+    <style>
+        :root {
+            /* Navy Blue Theme matching index.html */
+            --bg-main: #0d131d;
+            --bg-header: #080c13;
+            --bg-card: #151d2a;
+            --gold-accent: #dfb260;
+            --gold-hover: #f3c272;
+            --text-light: #f4f5f7;
+            --text-muted: #9ca3af;
+            --border-subtle: rgba(223, 178, 96, 0.25);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Top Bar Navigation */
+        header {
+            background-color: var(--bg-header);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--gold-accent);
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--gold-accent);
+        }
+
+        /* Page Layout */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto 60px;
+            padding: 0 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--gold-accent);
+        }
+
+        .product-wrapper {
+            display: grid;
+            grid-template-columns: 80px 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        /* Gallery Thumbnails */
+        .gallery-thumbs {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .thumb {
+            width: 100%;
+            height: 80px;
+            background-color: #ffffff;
+            border: 2px solid var(--border-subtle);
+            border-radius: 4px;
+            padding: 5px;
+            cursor: pointer;
+            object-fit: contain;
+            transition: border-color 0.2s;
+        }
+
+        .thumb:hover, .thumb.active {
+            border-color: var(--gold-accent);
+        }
+
+        /* Featured Main Image Box */
+        .main-image-box {
+            background-color: #ffffff;
+            border-radius: 6px;
+            padding: 20px;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .main-image-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Product Details Info */
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .product-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            line-height: 1.2;
+            letter-spacing: 0.5px;
+        }
+
+        .reviews-summary {
+            color: var(--gold-accent);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reviews-summary span {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .price-tag {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gold-accent);
+            margin: 5px 0;
+        }
+
+        .description-list {
+            list-style: disc;
+            padding-left: 20px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sku-tag {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        /* Navy Buy Card */
+        .buy-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .buy-card .shipping-info {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .buy-card .shipping-info span {
+            color: var(--gold-accent);
+            font-weight: 700;
+            display: block;
+        }
+
+        .quantity-picker {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .quantity-picker select {
+            padding: 8px 12px;
+            background-color: var(--bg-header);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-light);
+            border-radius: 4px;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+
+        .btn-add-bag {
+            background-color: var(--gold-accent);
+            color: #0d131d;
+            border: none;
+            padding: 12px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 0.2s;
+        }
+
+        .btn-add-bag:hover {
+            background-color: var(--gold-hover);
+        }
+
+        .btn-buy-now {
+            background-color: #d97706;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+
+        .btn-buy-now:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 900px) {
+            .product-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .gallery-thumbs {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">MONTGOMERY ARMS</a>
+        <nav>
+            <a href="index.html">OPTICS</a>
+            <a href="index.html">FIREARMS</a>
+            <a href="index.html">PARTS & COMPONENTS</a>
+            <a href="index.html">AMMUNITION</a>
+            <a href="index.html">TACTICAL GEAR</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-link">&larr; Back to Catalog</a>
+
+        <div class="product-wrapper">
+            <!-- Left Thumbnails -->
+            <div class="gallery-thumbs" id="thumb-container"></div>
+
+            <!-- Center Main Image -->
+            <div class="main-image-box">
+                <img id="main-product-img" src="" alt="Product Image" onerror="this.src='https://placehold.co/400x400/151d2a/ffffff?text=Montgomery+Arms';">
+            </div>
+
+            <!-- Right Details & Buy Section -->
+            <div class="product-info">
+                <h1 class="product-title" id="p-title">Loading...</h1>
+                
+                <div class="reviews-summary">
+                    &#9733;&#9733;&#9733;&#9733;&#9733; <span>4.9 / 5 Stars (Verified Buyer Reviews)</span>
+                </div>
+
+                <div class="price-tag" id="p-price">$0.00</div>
+
+                <ul class="description-list">
+                    <li>Engineered to exact military and tactical specification standards.</li>
+                    <li>Impact-resistant aircraft-grade housing with high-precision tolerance.</li>
+                    <li>Includes full factory warranty, mounting hardware, and documentation.</li>
+                </ul>
+
+                <div class="sku-tag" id="p-sku">SKU: ---</div>
+
+                <!-- Purchase Options Box -->
+                <div class="buy-card">
+                    <div class="shipping-info">
+                        <span>FREE Shipping Available</span>
+                        Ships directly from Montgomery Arms Depot.
+                    </div>
+
+                    <div class="quantity-picker">
+                        <label for="qty">Quantity:</label>
+                        <select id="qty">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+
+                    <button class="btn-add-bag">ADD TO BAG</button>
+                    <button class="btn-buy-now">BUY NOW</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            { sku: "CMMG22BA6AE", title: "CMMG, AR Conversion Kit, 22LR", price: "$183.94", image: "https://cmmg.com/media/catalog/product/2/2/22ba6ae_1.jpg" },
+            { sku: "HSEPS-CARRY-GR-MRS", title: "H-SUN EPS CARRY MRS GRN SOLAR ALUM", price: "$373.66" },
+            { sku: "EO552", title: "EOTech, 552 Holo Sight", price: "$564.32" },
+            { sku: "HSAEMS-211301", title: "AEMS SOLAR RED", price: "$347.59" },
+            { sku: "HSAEMS-PRO-X2-RD", title: "Holosun Technologies, AEMS X2 Pro, Red Dot", price: "$347.59" },
+            { sku: "HSARO-GD2", title: "H-SUN ARO ENCLOSED GLD 2MOA SIGHT", price: "$121.43" },
+            { sku: "HSARO-GR2", title: "H-SUN ARO ENCLOSED GRN 2MOA SIGHT", price: "$129.02" },
+            { sku: "MGMPI233BLK", title: "MAGPUL PMAG M3 5.56 40RD BLK", price: "$17.02" },
+            { sku: "SFM340C-BK-PRO", title: "SUREFIRE M340C SCOUT PRO 500 LUM BLK", price: "$255.64" }
+        ];
+
+        // Parse query parameter ?sku=...
+        const urlParams = new URLSearchParams(window.location.search);
+        const skuParam = urlParams.get('sku');
+
+        const product = products.find(p => p.sku === skuParam) || products[1];
+
+        // Populate fields
+        document.getElementById('p-title').innerText = product.title;
+        document.getElementById('p-price').innerText = product.price;
+        document.getElementById('p-sku').innerText = `SKU: ${product.sku}`;
+
+        const mainImg = document.getElementById('main-product-img');
+        const defaultImgPath = product.image ? product.image : `images/${product.sku}/000001.jpg`;
+        mainImg.src = defaultImgPath;
+
+        // Render gallery thumbnails
+        const thumbContainer = document.getElementById('thumb-container');
+        const imgList = [
+            defaultImgPath,
+            `images/${product.sku}/000002.jpg`,
+            `images/${product.sku}/000003.jpg`
+        ];
+
+        thumbContainer.innerHTML = imgList.map((src, i) => `
+            <img class="thumb ${i === 0 ? 'active' : ''}" 
+                 src="${src}" 
+                 onclick="switchImage(this, '${src}')" 
+                 onerror="if(${i} > 0) this.style.display='none'; else this.src='https://placehold.co/100x100/151d2a/ffffff?text=Item';">
+        `).join('');
+
+        function switchImage(el, src) {
+            document.getElementById('main-product-img').src = src;
+            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+    </script>
+</body>
+</html>

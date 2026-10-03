@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog - Montgomery Arms</title>
+    <style>
+        :root {
+            --bg-main: #232d42;
+            --bg-card: #161f33;
+            --gold-accent: #dfb260;
+            --gold-hover: #f3c272;
+            --text-light: #f4f5f7;
+            --text-muted: #a0aec0;
+            --border-subtle: rgba(223, 178, 96, 0.25);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-light);
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 2px solid var(--gold-accent);
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--gold-accent);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .search-bar-container {
+            max-width: 1200px;
+            margin: 30px auto 10px;
+            padding: 0 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 10px rgba(223, 178, 96, 0.3);
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 20px auto 50px;
+            padding: 0 20px;
+        }
+
+        .product-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--gold-accent);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background-color: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .product-img-box {
+            background-color: #ffffff;
+            border-radius: 6px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .product-img-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .sku-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 15px 0;
+            line-height: 1.3;
+            color: var(--text-light);
+            height: 2.6em;
+            overflow: hidden;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gold-accent);
+        }
+
+        .btn-add-cart {
+            background-color: var(--gold-accent);
+            color: #111;
+            border: none;
+            padding: 8px 14px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-add-cart:hover {
+            background-color: var(--gold-hover);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="products.html" class="logo">MONTGOMERY ARMS</a>
+    </header>
+
+    <div class="search-bar-container">
+        <input type="text" id="catalog-search" class="search-input" placeholder="Search catalog by SKU, brand, or model...">
+    </div>
+
+    <div id="product-grid" class="catalog-grid"></div>
+
+    <script>
+        const products = [
+            { 
+                sku: "CMMG22BA6AE", 
+                title: "CMMG, AR Conversion Kit, 22LR", 
+                price: "$183.94", 
+                category: "Accessories",
+                image: "https://cmmg.com/media/catalog/product/2/2/22ba6ae_1.jpg"
+            },
+            { 
+                sku: "HSEPS-CARRY-GR-MRS", 
+                title: "H-SUN EPS CARRY MRS GRN SOLAR ALUM", 
+                price: "$373.66", 
+                category: "Optics" 
+            },
+            { sku: "EO552", title: "EOTech, 552 Holo Sight", price: "$564.32", category: "Optics" },
+            { sku: "HSAEMS-211301", title: "AEMS SOLAR RED", price: "$347.59", category: "Optics" },
+            { sku: "HSAEMS-PRO-X2-RD", title: "Holosun Technologies, AEMS X2 Pro, Red Dot", price: "$347.59", category: "Optics" },
+            { sku: "HSARO-GD2", title: "H-SUN ARO ENCLOSED GLD 2MOA SIGHT", price: "$121.43", category: "Optics" },
+            { sku: "HSARO-GR2", title: "H-SUN ARO ENCLOSED GRN 2MOA SIGHT", price: "$129.02", category: "Optics" },
+            { sku: "MGMPI233BLK", title: "MAGPUL PMAG M3 5.56 40RD BLK", price: "$17.02", category: "Magazines" },
+            { sku: "SFM340C-BK-PRO", title: "SUREFIRE M340C SCOUT PRO 500 LUM BLK", price: "$255.64", category: "Lights" }
+        ];
+
+        function renderProducts(items) {
+            const grid = document.getElementById('product-grid');
+            if (!grid) return;
+            grid.innerHTML = items.map((p) => {
+                const imgSrc = p.image ? p.image : `images/${p.sku}/000001.jpg`;
+                return `
+                    <div class="product-card" onclick="window.location.href='product-detail.html?sku=${p.sku}'" style="cursor:pointer;">
+                        <span class="stock-badge">IN STOCK</span>
+                        <div class="product-img-box">
+                            <img src="${imgSrc}" 
+                                 alt="${p.title}" 
+                                 onerror="this.src='https://placehold.co/250x200/161f33/ffffff?text=Montgomery+Arms';">
+                        </div>
+                        <span class="sku-label">SKU: ${p.sku}</span>
+                        <h3 class="product-title">${p.title}</h3>
+                        <div class="product-bottom">
+                            <span class="product-price">${p.price}</span>
+                            <button class="btn-add-cart" onclick="event.stopPropagation(); window.location.href='product-detail.html?sku=${p.sku}';">
+                                VIEW DETAILS
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('catalog-search').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = products.filter(p => 
+                p.title.toLowerCase().includes(term) || p.sku.toLowerCase().includes(term)
+            );
+            renderProducts(filtered);
+        });
+
+        renderProducts(products);
+    </script>
+</body>
+</html>
