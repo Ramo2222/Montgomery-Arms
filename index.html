@@ -22,34 +22,72 @@
             color: var(--text-light);
         }
 
-        /* Top Bar & Navigation */
+        /* Top Bar & Navigation Header */
         header {
             background-color: #080a0f;
             border-bottom: 1px solid var(--border-subtle);
-            padding: 15px 40px;
+            padding: 12px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: var(--gold-accent);
             text-decoration: none;
             letter-spacing: 2px;
             font-family: 'Segoe UI', sans-serif;
+            white-space: nowrap;
+        }
+
+        /* Top Center Search Bar */
+        .header-search-container {
+            flex-grow: 1;
+            max-width: 450px;
+            margin: 0 15px;
+        }
+
+        .header-search-input {
+            width: 100%;
+            padding: 9px 15px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .header-search-input::placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .header-search-input:focus {
+            outline: none;
+            border-color: var(--gold-accent);
+        }
+
+        /* Top Right Cart & Nav Actions */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         nav {
             display: flex;
-            gap: 25px;
+            gap: 20px;
         }
 
         nav a {
             color: var(--text-light);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
             letter-spacing: 1.5px;
             text-transform: uppercase;
@@ -59,8 +97,42 @@
 
         nav a:hover, nav a.active {
             color: var(--gold-accent);
-            border-bottom: 2px solid var(--gold-accent);
-            padding-bottom: 4px;
+        }
+
+        /* Shopping Cart with Counter Badge */
+        .cart-btn {
+            position: relative;
+            background: none;
+            border: 1px solid var(--border-subtle);
+            background-color: var(--bg-card);
+            color: var(--text-light);
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: border-color 0.2s;
+        }
+
+        .cart-btn:hover {
+            border-color: var(--gold-accent);
+        }
+
+        .cart-count-badge {
+            background-color: var(--gold-accent);
+            color: #0b0e14;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
         }
 
         /* Hero Display Section */
@@ -135,6 +207,8 @@
             justify-content: space-around;
             padding: 20px 40px;
             text-align: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .feature-item h4 {
@@ -301,15 +375,26 @@
 <body>
 
     <header>
+        <!-- Logo -->
         <a href="index.html" class="logo">MONTGOMERY ARMS</a>
-        <nav>
-            <a href="#">OPTICS</a>
-            <a href="#">FIREARMS</a>
-            <a href="#">PARTS & COMPONENTS</a>
-            <a href="#">AMMUNITION</a>
-            <a href="#">TACTICAL GEAR</a>
-            <a href="#" class="active">FEATURED RELEASES</a>
-        </nav>
+
+        <!-- Top Center Search Bar with Watermark Placeholder -->
+        <div class="header-search-container">
+            <input type="text" id="top-search-bar" class="header-search-input" placeholder="Search Montgomery Arms...">
+        </div>
+
+        <!-- Right Side Nav & Cart Counter -->
+        <div class="header-right">
+            <nav>
+                <a href="#">OPTICS</a>
+                <a href="#">FIREARMS</a>
+                <a href="#">GEAR</a>
+            </nav>
+            <a href="#cart" class="cart-btn" id="cart-button">
+                <span>CART</span>
+                <span id="cart-counter" class="cart-count-badge">0</span>
+            </a>
+        </div>
     </header>
 
     <!-- Main Hero Banner with Gun Image -->
@@ -385,8 +470,8 @@
                         <span class="stock-badge">IN STOCK</span>
                         <div class="product-img-box">
                             <img src="${imgSrc}" 
-                                 alt="${p.title}" 
-                                 onerror="this.src='https://placehold.co/250x200/121824/ffffff?text=Montgomery+Arms';">
+                                   alt="${p.title}" 
+                                   onerror="this.src='https://placehold.co/250x200/121824/ffffff?text=Montgomery+Arms';">
                         </div>
                         <span class="sku-label">SKU: ${p.sku}</span>
                         <h3 class="product-title">${p.title}</h3>
@@ -401,6 +486,7 @@
             }).join('');
         }
 
+        // Catalog search filtering
         document.getElementById('catalog-search').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const filtered = products.filter(p => 
@@ -408,6 +494,14 @@
             );
             renderProducts(filtered);
         });
+
+        // Optional function to dynamically update the cart item counter count from anywhere in your site
+        function updateCartCount(count) {
+            const counter = document.getElementById('cart-counter');
+            if (counter) {
+                counter.textContent = count;
+            }
+        }
 
         renderProducts(products);
     </script>
