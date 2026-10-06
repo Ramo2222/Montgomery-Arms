@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Montgomery Arms</title>
+    <style>
+        :root {
+            --bg-main: #0b0e14;
+            --bg-card: #121824;
+            --bg-panel: #1a2130;
+            --gold-accent: #dfb260;
+            --gold-hover: #f3c272;
+            --orange-btn: #e67e22;
+            --text-light: #f4f5f7;
+            --text-muted: #9ca3af;
+            --border-subtle: rgba(223, 178, 96, 0.25);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-light); }
+
+        header {
+            background-color: #080a0f; border-bottom: 1px solid var(--border-subtle);
+            padding: 12px 30px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-size: 1.3rem; font-weight: 800; color: var(--gold-accent); text-decoration: none; letter-spacing: 2px; }
+
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: var(--gold-accent); margin-bottom: 25px; font-size: 1.8rem; }
+
+        .cart-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .cart-items-box { background-color: var(--bg-card); border-radius: 8px; padding: 20px; border: 1px solid var(--border-subtle); }
+        .cart-summary-box { background-color: var(--bg-panel); border-radius: 8px; padding: 20px; border: 1px solid var(--border-subtle); height: fit-content; }
+
+        .cart-item-row { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding: 15px 0; gap: 15px; }
+        .cart-item-row:last-child { border-bottom: none; }
+        .item-details { flex-grow: 1; }
+        .item-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 5px; color: var(--text-light); }
+        .item-price { color: var(--gold-accent); font-weight: bold; }
+        
+        .remove-btn { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 0.85rem; margin-top: 5px; text-decoration: underline; }
+        .remove-btn:hover { color: #c0392b; }
+
+        .summary-total { font-size: 1.4rem; font-weight: bold; color: var(--gold-accent); margin: 15px 0; }
+        .checkout-btn { width: 100%; padding: 14px; background-color: var(--orange-btn); color: #fff; border: none; border-radius: 20px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+        .checkout-btn:hover { background-color: #d35400; }
+        
+        .empty-cart { text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 1.1rem; }
+        .back-link { color: var(--text-muted); text-decoration: none; display: inline-block; margin-bottom: 20px; font-size: 0.9rem; }
+        .back-link:hover { color: var(--gold-accent); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">MONTGOMERY ARMS</a>
+    </header>
+
+    <main class="container">
+        <a href="index.html" class="back-link">&larr; Continue Shopping</a>
+        <h1>Your Shopping Cart</h1>
+
+        <div class="cart-layout">
+            <!-- Left: Items list -->
+            <div class="cart-items-box" id="cart-items-container">
+                <div class="empty-cart">Loading cart...</div>
+            </div>
+
+            <!-- Right: Subtotal & Checkout Summary -->
+            <div class="cart-summary-box">
+                <h3>Order Summary</h3>
+                <div class="summary-total" id="cart-subtotal">$0.00</div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Taxes and shipping calculated at checkout.</p>
+                <button class="checkout-btn" onclick="alert('Checkout integration coming soon!')">Proceed to Checkout</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script to render and manage cart state -->
+    <script src="products.js"></script>
+    <script>
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            let cart = JSON.parse(localStorage.getItem('montgomeryCart')) || [];
+
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="empty-cart">Your cart is empty.</div>';
+                subtotalEl.textContent = '$0.00';
+                return;
+            }
+
+            let html = '';
+            let subtotal = 0;
+
+            cart.forEach((cartItem, index) => {
+                // Find matching product data from products.js database
+                let productData = products.find(p => p.sku === cartItem.sku);
+                let title = productData ? productData.title : "Unknown Product";
+                let price = productData ? productData.price : 0.00;
+                let itemTotal = price * cartItem.quantity;
+                subtotal += itemTotal;
+
+                html += `
+                    <div class="cart-item-row">
+                        <div class="item-details">
+                            <div class="item-title">${title}</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">Qty: ${cartItem.quantity}</div>
+                            <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+                        </div>
+                        <div class="item-price">$${itemTotal.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            subtotalEl.textContent = '$' + subtotal.toFixed(2);
+        }
+
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('montgomeryCart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('montgomeryCart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        renderCart();
+    </script>
+</body>
+</html>

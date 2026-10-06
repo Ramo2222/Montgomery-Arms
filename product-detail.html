@@ -6,12 +6,13 @@
     <title>Product Details - Montgomery Arms</title>
     <style>
         :root {
-            /* Navy Blue Theme matching index.html */
-            --bg-main: #0d131d;
-            --bg-header: #080c13;
-            --bg-card: #151d2a;
+            --bg-main: #0b0e14;
+            --bg-card: #121824;
+            --bg-panel: #1a2130;
             --gold-accent: #dfb260;
             --gold-hover: #f3c272;
+            --orange-btn: #e67e22;
+            --orange-hover: #d35400;
             --text-light: #f4f5f7;
             --text-muted: #9ca3af;
             --border-subtle: rgba(223, 178, 96, 0.25);
@@ -19,369 +20,380 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-light);
-            line-height: 1.6;
-        }
+        body { background-color: var(--bg-main); color: var(--text-light); }
 
-        /* Top Bar Navigation */
+        /* Top Bar & Navigation Header */
         header {
-            background-color: var(--bg-header);
+            background-color: #080a0f;
             border-bottom: 1px solid var(--border-subtle);
-            padding: 15px 40px;
+            padding: 12px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--gold-accent);
-            text-decoration: none;
-            letter-spacing: 2px;
+        .logo { font-size: 1.3rem; font-weight: 800; color: var(--gold-accent); text-decoration: none; letter-spacing: 2px; white-space: nowrap; }
+        .header-search-container { flex-grow: 1; max-width: 450px; margin: 0 15px; }
+        
+        .header-search-input {
+            width: 100%; padding: 9px 15px; background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle); border-radius: 4px; color: var(--text-light); font-size: 0.85rem;
         }
+        .header-search-input:focus { outline: none; border-color: var(--gold-accent); }
 
-        nav {
-            display: flex;
-            gap: 25px;
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        nav { display: flex; gap: 20px; }
+        nav a { color: var(--text-light); text-decoration: none; font-size: 0.75rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.2s; }
+        nav a:hover { color: var(--gold-accent); }
+
+        .cart-btn {
+            background: none; border: 1px solid var(--border-subtle); background-color: var(--bg-card);
+            color: var(--text-light); padding: 8px 12px; border-radius: 4px; cursor: pointer; display: flex;
+            align-items: center; gap: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px;
         }
+        .cart-btn:hover { border-color: var(--gold-accent); }
+        .cart-count-badge { background-color: var(--gold-accent); color: #0b0e14; font-size: 0.7rem; font-weight: 800; padding: 1px 6px; border-radius: 10px; min-width: 18px; text-align: center; }
 
-        nav a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            transition: color 0.2s;
+        /* Main Container */
+        .container { max-width: 1400px; margin: 40px auto; padding: 0 20px; }
+        .back-link { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; display: inline-block; margin-bottom: 20px; }
+        .back-link:hover { color: var(--gold-accent); }
+
+        /* Top Section: Hero Grid */
+        .hero-grid { display: grid; grid-template-columns: 2fr 2fr 1fr; gap: 30px; margin-bottom: 50px; }
+
+        /* Gallery */
+        .gallery-wrapper { display: flex; gap: 20px; }
+        .thumbnails { display: flex; flex-direction: column; gap: 10px; }
+        .thumb { width: 60px; height: 60px; background: #fff; border: 2px solid transparent; border-radius: 4px; padding: 5px; cursor: pointer; }
+        .thumb:hover, .thumb.active { border-color: var(--gold-accent); }
+        .thumb img { width: 100%; height: 100%; object-fit: contain; }
+        
+        .main-image { flex-grow: 1; background: #fff; border-radius: 8px; padding: 20px; display: flex; align-items: center; justify-content: center; }
+        .main-image img { max-width: 100%; max-height: 400px; object-fit: contain; }
+
+        /* Center Info (About this item) */
+        .product-info h1 { font-size: 1.6rem; margin-bottom: 10px; line-height: 1.3; }
+        .reviews-summary { color: var(--gold-accent); font-size: 0.85rem; margin-bottom: 15px; cursor: pointer; text-decoration: underline; }
+        .reviews-summary span { color: var(--text-muted); margin-left: 8px; text-decoration: none; }
+        
+        .about-item h3 { font-size: 1.1rem; margin: 20px 0 10px 0; border-bottom: 1px solid var(--border-subtle); padding-bottom: 5px; }
+        .features-list { list-style-type: disc; margin-left: 20px; color: var(--text-light); line-height: 1.6; font-size: 0.9rem; }
+        .features-list li { margin-bottom: 8px; }
+
+        /* Right Buy Box */
+        .action-box { background-color: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 20px; height: fit-content; }
+        .price { font-size: 2.2rem; font-weight: 700; color: var(--gold-accent); margin-bottom: 15px; }
+        .shipping-notice { font-size: 0.85rem; margin-bottom: 20px; color: var(--text-muted); }
+        .shipping-notice strong { color: #2ecc71; display: block; margin-bottom: 4px; font-size: 0.9rem;}
+        
+        .quantity-wrapper { margin-bottom: 15px; }
+        .quantity-wrapper label { display: block; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-muted); }
+        select { width: 100%; padding: 10px; background-color: var(--bg-main); color: var(--text-light); border: 1px solid #333; border-radius: 4px; font-size: 1rem; }
+
+        .btn { width: 100%; padding: 14px; font-weight: 800; letter-spacing: 1px; border: none; border-radius: 20px; cursor: pointer; margin-bottom: 12px; font-size: 0.9rem; transition: all 0.2s; }
+        .btn-cart { background-color: var(--gold-accent); color: var(--bg-main); }
+        .btn-cart:hover { background-color: var(--gold-hover); }
+        .btn-buy { background-color: var(--orange-btn); color: #fff; }
+        .btn-buy:hover { background-color: var(--orange-hover); }
+
+        /* Expanded Sections */
+        .section-header { font-size: 1.4rem; color: var(--gold-accent); border-bottom: 2px solid var(--border-subtle); padding-bottom: 10px; margin: 50px 0 20px 0; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Rich Description (From the Brand) */
+        .rich-content { background-color: var(--bg-card); padding: 30px; border-radius: 8px; line-height: 1.8; }
+        .rich-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; align-items: center; }
+        .rich-grid img { width: 100%; border-radius: 8px; }
+        .rich-text h4 { color: var(--gold-accent); font-size: 1.2rem; margin-bottom: 15px; }
+
+        /* Specs Table */
+        .specs-table { width: 100%; border-collapse: collapse; background-color: var(--bg-card); border-radius: 8px; overflow: hidden; }
+        .specs-table th, .specs-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-subtle); }
+        .specs-table th { background-color: var(--bg-panel); color: var(--text-muted); width: 30%; font-weight: normal; }
+        .specs-table td { color: var(--text-light); }
+
+        /* Related Products */
+        .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .related-card { background-color: var(--bg-card); border: 1px solid var(--border-subtle); padding: 15px; border-radius: 6px; cursor: pointer; transition: border-color 0.2s; text-decoration: none; color: inherit; display: block;}
+        .related-card:hover { border-color: var(--gold-accent); }
+        .related-img { background: #fff; height: 150px; display: flex; align-items: center; justify-content: center; border-radius: 4px; margin-bottom: 15px; padding: 10px; }
+        .related-img img { max-width: 100%; max-height: 100%; }
+        .related-title { font-size: 0.85rem; margin-bottom: 10px; height: 2.6em; overflow: hidden; }
+        .related-price { color: var(--gold-accent); font-weight: 700; font-size: 1.1rem; }
+
+        /* Reviews Section */
+        .reviews-container { display: grid; grid-template-columns: 1fr 2fr; gap: 40px; }
+        .review-stats { background-color: var(--bg-card); padding: 25px; border-radius: 8px; height: fit-content; }
+        .rating-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.9rem; }
+        .bar-outer { flex-grow: 1; height: 12px; background-color: var(--bg-main); border-radius: 6px; overflow: hidden; }
+        .bar-inner { height: 100%; background-color: var(--gold-accent); }
+        
+        .review-list { display: flex; flex-direction: column; gap: 20px; }
+        .review-item { border-bottom: 1px solid var(--border-subtle); padding-bottom: 20px; }
+        .reviewer { font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+        .verified { color: #e67e22; font-size: 0.75rem; font-weight: bold; }
+        .review-title { font-weight: bold; margin-bottom: 10px; color: var(--gold-accent); }
+        .review-text { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+        @media (max-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr 1fr; }
+            .action-box { grid-column: span 2; }
+            .reviews-container, .rich-grid { grid-template-columns: 1fr; }
         }
-
-        nav a:hover {
-            color: var(--gold-accent);
-        }
-
-        /* Page Layout */
-        .container {
-            max-width: 1200px;
-            margin: 30px auto 60px;
-            padding: 0 20px;
-        }
-
-        .back-link {
-            display: inline-block;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.85rem;
-            margin-bottom: 25px;
-            transition: color 0.2s;
-        }
-
-        .back-link:hover {
-            color: var(--gold-accent);
-        }
-
-        .product-wrapper {
-            display: grid;
-            grid-template-columns: 80px 1fr 1fr;
-            gap: 30px;
-            align-items: start;
-        }
-
-        /* Gallery Thumbnails */
-        .gallery-thumbs {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .thumb {
-            width: 100%;
-            height: 80px;
-            background-color: #ffffff;
-            border: 2px solid var(--border-subtle);
-            border-radius: 4px;
-            padding: 5px;
-            cursor: pointer;
-            object-fit: contain;
-            transition: border-color 0.2s;
-        }
-
-        .thumb:hover, .thumb.active {
-            border-color: var(--gold-accent);
-        }
-
-        /* Featured Main Image Box */
-        .main-image-box {
-            background-color: #ffffff;
-            border-radius: 6px;
-            padding: 20px;
-            height: 480px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border-subtle);
-        }
-
-        .main-image-box img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        /* Product Details Info */
-        .product-info {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .product-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-light);
-            line-height: 1.2;
-            letter-spacing: 0.5px;
-        }
-
-        .reviews-summary {
-            color: var(--gold-accent);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .reviews-summary span {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        .price-tag {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--gold-accent);
-            margin: 5px 0;
-        }
-
-        .description-list {
-            list-style: disc;
-            padding-left: 20px;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .sku-tag {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
-
-        /* Navy Buy Card */
-        .buy-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 6px;
-            padding: 20px;
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .buy-card .shipping-info {
-            font-size: 0.85rem;
-            color: var(--text-light);
-        }
-
-        .buy-card .shipping-info span {
-            color: var(--gold-accent);
-            font-weight: 700;
-            display: block;
-        }
-
-        .quantity-picker {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .quantity-picker select {
-            padding: 8px 12px;
-            background-color: var(--bg-header);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-light);
-            border-radius: 4px;
-            width: 100%;
-            font-size: 0.9rem;
-        }
-
-        .btn-add-bag {
-            background-color: var(--gold-accent);
-            color: #0d131d;
-            border: none;
-            padding: 12px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: background 0.2s;
-        }
-
-        .btn-add-bag:hover {
-            background-color: var(--gold-hover);
-        }
-
-        .btn-buy-now {
-            background-color: #d97706;
-            color: #ffffff;
-            border: none;
-            padding: 12px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: opacity 0.2s;
-        }
-
-        .btn-buy-now:hover {
-            opacity: 0.9;
-        }
-
-        @media (max-width: 900px) {
-            .product-wrapper {
-                grid-template-columns: 1fr;
-            }
-            .gallery-thumbs {
-                flex-direction: row;
-            }
+        @media (max-width: 768px) {
+            .hero-grid { grid-template-columns: 1fr; }
+            .action-box { grid-column: span 1; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Unified Header -->
     <header>
         <a href="index.html" class="logo">MONTGOMERY ARMS</a>
-        <nav>
-            <a href="index.html">OPTICS</a>
-            <a href="index.html">FIREARMS</a>
-            <a href="index.html">PARTS & COMPONENTS</a>
-            <a href="index.html">AMMUNITION</a>
-            <a href="index.html">TACTICAL GEAR</a>
-        </nav>
+        <div class="header-search-container">
+            <input type="text" id="catalog-search" class="header-search-input" placeholder="Search Montgomery Arms...">
+        </div>
+        <div class="header-right">
+            <nav>
+                <a href="#">OPTICS</a>
+                <a href="#">FIREARMS</a>
+                <a href="#">PARTS</a>
+            </nav>
+            <a href="cart.html" class="cart-btn" id="cart-button">
+                <span>CART</span>
+                <span id="cart-counter" class="cart-count-badge">0</span>
+            </a>
+        </div>
     </header>
 
-    <div class="container">
+    <main class="container">
         <a href="index.html" class="back-link">&larr; Back to Catalog</a>
 
-        <div class="product-wrapper">
-            <!-- Left Thumbnails -->
-            <div class="gallery-thumbs" id="thumb-container"></div>
-
-            <!-- Center Main Image -->
-            <div class="main-image-box">
-                <img id="main-product-img" src="" alt="Product Image" onerror="this.src='https://placehold.co/400x400/151d2a/ffffff?text=Montgomery+Arms';">
+        <!-- Top Section: Amazon Style Layout -->
+        <div class="hero-grid">
+            
+            <!-- Left: Image Gallery -->
+            <div class="gallery-wrapper">
+                <div class="thumbnails">
+                    <div class="thumb active"><img src="https://placehold.co/100x100/ffffff/000000?text=Side" alt="Side View"></div>
+                    <div class="thumb"><img src="https://placehold.co/100x100/ffffff/000000?text=Top" alt="Top View"></div>
+                    <div class="thumb"><img src="https://placehold.co/100x100/ffffff/000000?text=Box" alt="In Box"></div>
+                </div>
+                <div class="main-image">
+                    <img id="product-img" src="https://placehold.co/500x500/ffffff/000000?text=EPS+CARRY+MRS" alt="H-SUN EPS CARRY">
+                </div>
             </div>
 
-            <!-- Right Details & Buy Section -->
+            <!-- Center: Product Info & Bullet Points -->
             <div class="product-info">
-                <h1 class="product-title" id="p-title">Loading...</h1>
+                <h1 id="product-title">Holosun EPS Carry Series, 2MOA, 6MOA, 32 MOA Circle 2 MOA Dot Options, Modified RMSc - Green</h1>
                 
-                <div class="reviews-summary">
-                    &#9733;&#9733;&#9733;&#9733;&#9733; <span>4.9 / 5 Stars (Verified Buyer Reviews)</span>
+                <div class="reviews-summary" onclick="document.getElementById('reviews').scrollIntoView({behavior: 'smooth'});">
+                    ★★★★★ <span>4.5 (656 ratings) | Search this page</span>
                 </div>
 
-                <div class="price-tag" id="p-price">$0.00</div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 10px;">SKU: <span id="product-sku">HSEPS-CARRY-GR-MRS</span></p>
 
-                <ul class="description-list">
-                    <li>Engineered to exact military and tactical specification standards.</li>
-                    <li>Impact-resistant aircraft-grade housing with high-precision tolerance.</li>
-                    <li>Includes full factory warranty, mounting hardware, and documentation.</li>
-                </ul>
+                <div class="about-item">
+                    <h3>About this item</h3>
+                    <ul class="features-list">
+                        <li><strong>HOLOSUN REFLEX SIGHT</strong> - The EPS Carry is an enclosed handgun sight designed for narrower, subcompact handguns; Features an aspheric lens for a perfectly clear sight picture.</li>
+                        <li><strong>HIGH PERFORMANCE</strong> - Super LED with a 2MOA dot and up to a 50k hour battery life; Compatible with popular subcompact pistols including G43 MOS, G48 MOS, Hellcat, P365 X/XL.</li>
+                        <li><strong>SOLAR FAILSAFE</strong> - If your battery fails, this green dot sight has a backup power source when natural or artificial light is available.</li>
+                        <li><strong>MULTILAYER REFLECTIVE GLASS</strong> - Optical glass lenses with multilayer coatings applied to facilitate maximum light transmission and wear resistance while reducing glare.</li>
+                    </ul>
+                </div>
+            </div>
 
-                <div class="sku-tag" id="p-sku">SKU: ---</div>
+            <!-- Right: Buy Box -->
+            <div class="action-box">
+                <div class="price" id="product-price">$429.99</div>
+                
+                <div class="shipping-notice">
+                    <strong>FREE delivery Tomorrow</strong>
+                    Order within 2 hrs 5 mins.<br><br>
+                    Ships from: Montgomery Arms Depot<br>
+                    Sold by: Montgomery Arms<br>
+                    Returns: FREE 30-day returns
+                </div>
 
-                <!-- Purchase Options Box -->
-                <div class="buy-card">
-                    <div class="shipping-info">
-                        <span>FREE Shipping Available</span>
-                        Ships directly from Montgomery Arms Depot.
-                    </div>
+                <div class="quantity-wrapper">
+                    <label for="cart-quantity">Quantity:</label>
+                    <select id="cart-quantity">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
 
-                    <div class="quantity-picker">
-                        <label for="qty">Quantity:</label>
-                        <select id="qty">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </select>
-                    </div>
-
-                    <button class="btn-add-bag">ADD TO BAG</button>
-                    <button class="btn-buy-now">BUY NOW</button>
+                <button id="add-to-cart-btn" class="btn btn-cart">Add to Cart</button>
+                <button class="btn btn-buy">Buy Now</button>
+                
+                <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 15px;">
+                    🔒 Secure transaction
                 </div>
             </div>
         </div>
-    </div>
 
+        <!-- Rich Product Description (From the Brand) -->
+        <h2 class="section-header">From the Brand</h2>
+        <div class="rich-content">
+            <p>Since 2013, Holosun has been committed to creating innovative optic and laser/IR technologies for a broad range of shooting and hunting needs. Today, Holosun is at the forefront of developing new features including innovations such as up to a 100,000 hr battery life, Solar Fail-Safe technology, and our signature multi-reticle system (MRS).</p>
+            
+            <div class="rich-grid">
+                <div class="rich-text">
+                    <h4>Shake Awake™ Technology</h4>
+                    <p>Shake Awake Technology is a standard feature on all current model Holosun optics and serves to extend battery life by deactivating the optic's LED while not in use. A highly sensitive motion sensor works to detect motion keeping the LED powered on during use. The slightest touch of the firearm instantly reactivates the LED so your optic is ready when needed.</p>
+                </div>
+                <img src="https://placehold.co/600x300/121824/dfb260?text=Shake+Awake+Graphic" alt="Shake Awake Tech">
+                
+                <img src="https://placehold.co/600x300/121824/dfb260?text=MRS+Reticle+System" alt="Multi Reticle System">
+                <div class="rich-text">
+                    <h4>Multiple Reticle System (MRS)</h4>
+                    <p>MRS-equipped optics allow you to determine the type of aiming point you want to use. Select a fast sight picture for shorter distances with a 32 MOA circle with 2 MOA dot, or deactivate the large ring leaving just the 2 MOA dot for an uncluttered sight picture and increased precision at range.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Information / Specs -->
+        <h2 class="section-header">Product Information</h2>
+        <table class="specs-table">
+            <tbody>
+                <tr><th>Brand</th><td>Holosun</td></tr>
+                <tr><th>Color</th><td>Green Reticle</td></tr>
+                <tr><th>Style</th><td>Multi-Reticle (MRS)</td></tr>
+                <tr><th>Item Dimensions LxWxH</th><td>1.62 x 1.07 x 0.95 inches</td></tr>
+                <tr><th>Sport</th><td>Hunting, Tactical & Military</td></tr>
+                <tr><th>Item Weight</th><td>1 Ounces</td></tr>
+                <tr><th>Material</th><td>7075 T6 Aluminum</td></tr>
+                <tr><th>Magnification Maximum</th><td>1x</td></tr>
+                <tr><th>Objective Lens Diameter</th><td>0.58 Inches</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Related Products Carousel/Grid -->
+        <h2 class="section-header">Products related to this item</h2>
+        <div class="related-grid">
+            <a href="#" class="related-card">
+                <div class="related-img"><img src="https://placehold.co/150x150/ffffff/000000?text=Optic+1" alt="Optic 1"></div>
+                <div class="related-title">Holosun HS507K-X2 Classic Multi Reticle Red Dot Sight</div>
+                <div class="related-price">$295.99</div>
+            </a>
+            <a href="#" class="related-card">
+                <div class="related-img"><img src="https://placehold.co/150x150/ffffff/000000?text=Optic+2" alt="Optic 2"></div>
+                <div class="related-title">Vortex Defender-ST Micro Dot Sight with Auto-Shutoff</div>
+                <div class="related-price">$299.00</div>
+            </a>
+            <a href="#" class="related-card">
+                <div class="related-img"><img src="https://placehold.co/150x150/ffffff/000000?text=Optic+3" alt="Optic 3"></div>
+                <div class="related-title">OSIGHT SE Enclosed Green Dot, 2 & 32 MOA Multi-Reticle</div>
+                <div class="related-price">$219.99</div>
+            </a>
+            <a href="#" class="related-card">
+                <div class="related-img"><img src="https://placehold.co/150x150/ffffff/000000?text=Optic+4" alt="Optic 4"></div>
+                <div class="related-title">Cylee Wolf EDG Drop-Proof Enclosed Red Dot Sight</div>
+                <div class="related-price">$189.99</div>
+            </a>
+        </div>
+
+        <!-- Customer Reviews -->
+        <h2 class="section-header" id="reviews">Customer Reviews</h2>
+        <div class="reviews-container">
+            <!-- Left: Rating Distribution -->
+            <div class="review-stats">
+                <div style="font-size: 3rem; color: var(--gold-accent); font-weight: bold; margin-bottom: 5px;">4.5 out of 5</div>
+                <div style="color: var(--text-muted); margin-bottom: 25px;">656 global ratings</div>
+                
+                <div class="rating-bar"><span>5 star</span><div class="bar-outer"><div class="bar-inner" style="width: 82%;"></div></div><span>82%</span></div>
+                <div class="rating-bar"><span>4 star</span><div class="bar-outer"><div class="bar-inner" style="width: 7%;"></div></div><span>7%</span></div>
+                <div class="rating-bar"><span>3 star</span><div class="bar-outer"><div class="bar-inner" style="width: 2%;"></div></div><span>2%</span></div>
+                <div class="rating-bar"><span>2 star</span><div class="bar-outer"><div class="bar-inner" style="width: 1%;"></div></div><span>1%</span></div>
+                <div class="rating-bar"><span>1 star</span><div class="bar-outer"><div class="bar-inner" style="width: 8%;"></div></div><span>8%</span></div>
+                
+                <button class="btn btn-cart" style="margin-top: 20px;">Write a customer review</button>
+            </div>
+
+            <!-- Right: Written Reviews -->
+            <div class="review-list">
+                <div class="review-item">
+                    <div class="reviewer">👤 Terry <span class="verified">Verified Purchase</span></div>
+                    <div class="review-title">★★★★★ GET IT NOW!!!</div>
+                    <div class="review-text">
+                        First off, I've duty and carried Holosun for years, so I knew it was going to be good before I got it, but wow. I have an astigmatism that makes red dots bloom bad, and has started doing it with green as well. This clarity is amazing for me. The dot is even better than the green was when I first started carrying. I seriously can't speak highly enough about this sight.
+                    </div>
+                </div>
+                
+                <div class="review-item">
+                    <div class="reviewer">👤 James Baldwin <span class="verified">Verified Purchase</span></div>
+                    <div class="review-title">★★★★★ Perfect for any carry gun</div>
+                    <div class="review-text">
+                        This Holosun EPS Carry sight is a remarkable accessory for subcompact handguns, and it truly delivers on its promise of compactness and ease of use. The enclosed emitter keeps lint and dust out perfectly. Worth every penny.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Database Integration & Cart Scripts -->
+    <script src="products.js"></script>
     <script>
-        const products = [
-            { sku: "CMMG22BA6AE", title: "CMMG, AR Conversion Kit, 22LR", price: "$183.94", image: "https://cmmg.com/media/catalog/product/2/2/22ba6ae_1.jpg" },
-            { sku: "HSEPS-CARRY-GR-MRS", title: "H-SUN EPS CARRY MRS GRN SOLAR ALUM", price: "$373.66" },
-            { sku: "EO552", title: "EOTech, 552 Holo Sight", price: "$564.32" },
-            { sku: "HSAEMS-211301", title: "AEMS SOLAR RED", price: "$347.59" },
-            { sku: "HSAEMS-PRO-X2-RD", title: "Holosun Technologies, AEMS X2 Pro, Red Dot", price: "$347.59" },
-            { sku: "HSARO-GD2", title: "H-SUN ARO ENCLOSED GLD 2MOA SIGHT", price: "$121.43" },
-            { sku: "HSARO-GR2", title: "H-SUN ARO ENCLOSED GRN 2MOA SIGHT", price: "$129.02" },
-            { sku: "MGMPI233BLK", title: "MAGPUL PMAG M3 5.56 40RD BLK", price: "$17.02" },
-            { sku: "SFM340C-BK-PRO", title: "SUREFIRE M340C SCOUT PRO 500 LUM BLK", price: "$255.64" }
-        ];
-
-        // Parse query parameter ?sku=...
-        const urlParams = new URLSearchParams(window.location.search);
-        const skuParam = urlParams.get('sku');
-
-        const product = products.find(p => p.sku === skuParam) || products[1];
-
-        // Populate fields
-        document.getElementById('p-title').innerText = product.title;
-        document.getElementById('p-price').innerText = product.price;
-        document.getElementById('p-sku').innerText = `SKU: ${product.sku}`;
-
-        const mainImg = document.getElementById('main-product-img');
-        const defaultImgPath = product.image ? product.image : `images/${product.sku}/000001.jpg`;
-        mainImg.src = defaultImgPath;
-
-        // Render gallery thumbnails
-        const thumbContainer = document.getElementById('thumb-container');
-        const imgList = [
-            defaultImgPath,
-            `images/${product.sku}/000002.jpg`,
-            `images/${product.sku}/000003.jpg`
-        ];
-
-        thumbContainer.innerHTML = imgList.map((src, i) => `
-            <img class="thumb ${i === 0 ? 'active' : ''}" 
-                 src="${src}" 
-                 onclick="switchImage(this, '${src}')" 
-                 onerror="if(${i} > 0) this.style.display='none'; else this.src='https://placehold.co/100x100/151d2a/ffffff?text=Item';">
-        `).join('');
-
-        function switchImage(el, src) {
-            document.getElementById('main-product-img').src = src;
-            document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
+        function updateCartDisplay() {
+            let cart = JSON.parse(localStorage.getItem('montgomery_cart')) || [];
+            let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const counter = document.getElementById('cart-counter');
+            if (counter) { counter.textContent = totalItems; }
         }
+
+        // Dynamic SKU Database Population
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const requestedSku = urlParams.get('sku');
+
+            if (requestedSku && typeof productsDB !== 'undefined' && productsDB[requestedSku]) {
+                const product = productsDB[requestedSku];
+                
+                const titleEl = document.getElementById('product-title');
+                const priceEl = document.getElementById('product-price');
+                const skuEl = document.getElementById('product-sku');
+                const imgEl = document.getElementById('product-img');
+
+                if (titleEl) titleEl.textContent = product.title;
+                if (priceEl) priceEl.textContent = product.price;
+                if (skuEl) skuEl.textContent = product.sku;
+                if (imgEl && product.image) imgEl.src = product.image;
+            }
+        });
+
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const sku = urlParams.get('sku') || document.getElementById('product-sku').innerText;
+                const qtySelect = document.getElementById('cart-quantity');
+                const quantity = qtySelect ? parseInt(qtySelect.value) : 1;
+
+                if (sku) {
+                    let cart = JSON.parse(localStorage.getItem('montgomery_cart')) || [];
+                    let existingItem = cart.find(item => item.sku === sku);
+                    if (existingItem) { existingItem.quantity += quantity; } 
+                    else { cart.push({ sku: sku, quantity: quantity }); }
+                    
+                    localStorage.setItem('montgomery_cart', JSON.stringify(cart));
+                    updateCartDisplay();
+                    
+                    const originalText = addToCartBtn.textContent;
+                    addToCartBtn.textContent = "Added to Cart!";
+                    setTimeout(() => addToCartBtn.textContent = originalText, 1500);
+                }
+            });
+        }
+        updateCartDisplay();
     </script>
 </body>
 </html>
