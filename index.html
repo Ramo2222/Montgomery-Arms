@@ -249,6 +249,26 @@
             padding: 20px;
         }
 
+        .search-bar-container {
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 4px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--gold-accent);
+        }
+
         .catalog-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -399,10 +419,9 @@
                 <a href="#">FIREARMS</a>
                 <a href="#">GEAR</a>
             </nav>
-            <a href="#" class="cart-btn" id="cart-button">
-                <span>CART</span>
-                <span id="cart-counter" class="cart-count-badge">0</span>
-            </a>
+<a href="#" class="cart-btn" id="cart-button" onclick="renderCartModal(); document.getElementById('cart-modal').classList.add('show-modal'); return false;">    <span>CART</span>
+    <span id="cart-counter" class="cart-count-badge">0</span>
+</a>
         </div>
     </header>
 
@@ -503,7 +522,8 @@
         // Initialize Products
         renderProducts(products);
 
-        // --- CART & CHECKOUT LOGIC ---
+        // --- COMPLETE CART & CHECKOUT LOGIC ---
+        
         let cart = JSON.parse(localStorage.getItem('montgomery_cart')) || [];
         const cartModal = document.getElementById('cart-modal');
         const cartButton = document.getElementById('cart-button');
@@ -516,7 +536,7 @@
         if (cartButton) {
             cartButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                renderCartModal();
+                renderCartItems();
                 cartModal.classList.add('show-modal');
             });
         }
@@ -547,7 +567,7 @@
             cart.splice(index, 1);
             saveCart();
             updateCartBadge();
-            renderCartModal();
+            renderCartItems();
         }
 
         function updateQuantity(index, delta) {
@@ -557,53 +577,50 @@
             } else {
                 saveCart();
                 updateCartBadge();
-                renderCartModal();
+                renderCartItems();
             }
         }
 
-        function renderCartModal() {
-            cart = JSON.parse(localStorage.getItem('montgomery_cart')) || [];
+        function renderCartItems() {
             if (!cartItemsContainer) return;
+            cartItemsContainer.innerHTML = '';
             
             if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<p style="color: #9ca3af;">Your cart is empty.</p>';
+                cartItemsContainer.innerHTML = '<p>Your loadout is empty.</p>';
                 if (cartTotalPrice) cartTotalPrice.textContent = '0.00';
                 if (checkoutBtn) checkoutBtn.disabled = true;
                 return;
             }
 
             if (checkoutBtn) checkoutBtn.disabled = false;
-            let html = '';
-            let grandTotal = 0;
+            let totalCost = 0;
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                totalCost += itemTotal;
 
-            cart.forEach((cartItem, index) => {
-                let prod = products.find(p => p.sku === cartItem.sku);
-                let title = prod ? prod.title : (cartItem.name || cartItem.sku);
-                let priceVal = prod ? parseFloat(prod.price.replace('$', '')) : (cartItem.price || 0);
-                let itemTotal = priceVal * cartItem.quantity;
-                grandTotal += itemTotal;
-
-                html += `
-                    <div class="cart-item">
-                        <div class="item-details">
-                            <strong>${title}</strong> <br>
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">$${priceVal.toFixed(2)} / ea</span>
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('cart-item');
+                
+                itemElement.innerHTML = `
+                    <div class="item-details">
+                        <strong>${item.name || item.title}</strong> <br>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">$${item.price.toFixed(2)} / ea</span>
+                    </div>
+                    <div class="item-actions">
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                            <span class="qty-display">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
                         </div>
-                        <div class="item-actions">
-                            <div class="qty-controls">
-                                <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
-                                <span class="qty-display">${cartItem.quantity}</span>
-                                <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
-                            </div>
-                            <span style="min-width: 70px; text-align: right; font-weight: bold; color: var(--text-light);">$${itemTotal.toFixed(2)}</span>
-                            <button class="remove-btn" onclick="removeFromCart(${index})" title="Remove Item">✕</button>
-                        </div>
+                        <span style="min-width: 70px; text-align: right; font-weight: bold; color: var(--text-light);">$${itemTotal.toFixed(2)}</span>
+                        <button class="remove-btn" onclick="removeFromCart(${index})" title="Remove Item">✕</button>
                     </div>
                 `;
+                cartItemsContainer.appendChild(itemElement);
             });
 
-            cartItemsContainer.innerHTML = html;
-            if (cartTotalPrice) cartTotalPrice.textContent = grandTotal.toFixed(2);
+            if (cartTotalPrice) cartTotalPrice.textContent = totalCost.toFixed(2);
         }
 
         if (checkoutBtn) {
@@ -618,22 +635,56 @@
                 cart = [];
                 saveCart();
                 updateCartBadge();
-                renderCartModal();
+                renderCartItems();
                 cartModal.classList.remove('show-modal');
             });
         }
 
         // Initialize cart badge on load
+    function renderCartModal() {
+    let cart = JSON.parse(localStorage.getItem('montgomery_cart')) || [];
+    const container = document.getElementById('cart-items-container');
+    const totalEl = document.getElementById('cart-total-price');
+    
+    if (cart.length === 0) {
+        if (container) container.innerHTML = '<p style="color: #9ca3af;">Your cart is empty.</p>';
+        if (totalEl) totalEl.textContent = '0.00';
+        return;
+    }
+
+
+    cart.forEach((cartItem) => {
+        let prod = (typeof products !== 'undefined') ? products.find(p => p.sku === cartItem.sku) : null;
+        let title = prod ? prod.title : cartItem.sku;
+        let priceVal = prod ? parseFloat(prod.price.replace('$', '')) : 0;
+        let itemTotal = priceVal * cartItem.quantity;
+        grandTotal += itemTotal;
+
+        html += `
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(223,178,96,0.2); padding-bottom: 10px; margin-bottom: 10px;">
+                <div>
+                    <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 3px; color: #f4f5f7;">${title}</div>
+                    <div style="color: #9ca3af; font-size: 0.8rem;">Qty: ${cartItem.quantity}</div>
+                </div>
+                <div style="color: #dfb260; font-weight: 700;">$${itemTotal.toFixed(2)}</div>
+            </div>
+        `;
+    });
+
+    if (container) container.innerHTML = html;
+    if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
+}
         updateCartBadge();
     </script>
 
-    <!-- Cart Modal Display Panel placed correctly INSIDE body -->
-    <div id="cart-modal" class="cart-modal">
+    <!-- Cart Modal Display Panel -->
+    <div id="cart-modal" class="cart-modal hidden">
         <div class="cart-content">
             <span class="close-cart" id="close-cart">&times;</span>
             <h2>Your Shopping Cart</h2>
             
             <div id="cart-items-container">
+                <!-- JavaScript will inject items here -->
                 <p>Your cart is empty.</p>
             </div>
             
