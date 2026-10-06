@@ -82,7 +82,8 @@
         function renderCart() {
             const container = document.getElementById('cart-items-container');
             const subtotalEl = document.getElementById('cart-subtotal');
-            let cart = JSON.parse(localStorage.getItem('montgomeryCart')) || [];
+            // FIXED: Changed storage key to match montgomery_cart everywhere
+            let cart = JSON.parse(localStorage.getItem('montgomery_cart')) || [];
 
             if (cart.length === 0) {
                 container.innerHTML = '<div class="empty-cart">Your cart is empty.</div>';
@@ -94,10 +95,9 @@
             let subtotal = 0;
 
             cart.forEach((cartItem, index) => {
-                // Find matching product data from products.js database
-                let productData = products.find(p => p.sku === cartItem.sku);
-                let title = productData ? productData.title : "Unknown Product";
-                let price = productData ? productData.price : 0.00;
+                let productData = (typeof products !== 'undefined') ? products.find(p => p.sku === cartItem.sku) : null;
+                let title = productData ? productData.title : cartItem.sku;
+                let price = productData ? parseFloat(productData.price.replace('$', '')) : 0.00;
                 let itemTotal = price * cartItem.quantity;
                 subtotal += itemTotal;
 
@@ -118,9 +118,9 @@
         }
 
         function removeItem(index) {
-            let cart = JSON.parse(localStorage.getItem('montgomeryCart')) || [];
+            let cart = JSON.parse(localStorage.getItem('montgomery_cart')) || [];
             cart.splice(index, 1);
-            localStorage.setItem('montgomeryCart', JSON.stringify(cart));
+            localStorage.setItem('montgomery_cart', JSON.stringify(cart));
             renderCart();
         }
 
