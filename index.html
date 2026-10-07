@@ -419,9 +419,11 @@
                 <a href="#">FIREARMS</a>
                 <a href="#">GEAR</a>
             </nav>
-<a href="#" class="cart-btn" id="cart-button" onclick="renderCartModal(); document.getElementById('cart-modal').classList.add('show-modal'); return false;">    <span>CART</span>
-    <span id="cart-counter" class="cart-count-badge">0</span>
-</a>
+            <!-- Removed the inline onclick here; JS handles it cleanly now -->
+            <a href="#" class="cart-btn" id="cart-button">
+                <span>CART</span>
+                <span id="cart-counter" class="cart-count-badge">0</span>
+            </a>
         </div>
     </header>
 
@@ -460,20 +462,39 @@
         </div>
     </div>
 
+    <!-- Cart Modal Display Panel -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="cart-content">
+            <span class="close-cart" id="close-cart">&times;</span>
+            <h2>Your Shopping Cart</h2>
+            
+            <div id="cart-items-container">
+                <!-- JavaScript will inject items here -->
+                <p>Your cart is empty.</p>
+            </div>
+            
+            <div class="cart-total">
+                <strong>Total: $<span id="cart-total-price">0.00</span></strong>
+            </div>
+            
+            <button id="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
     <script>
         const products = [
-            { 
-                sku: "CMMG22BA6AE", 
-                title: "CMMG, AR Conversion Kit, 22LR", 
-                price: "$183.94", 
+            {
+                sku: "CMMG22BA6AE",
+                title: "CMMG, AR Conversion Kit, 22LR",
+                price: "$183.94",
                 category: "Accessories",
                 image: "https://cmmg.com/media/catalog/product/2/2/22ba6ae_1.jpg"
             },
-            { 
-                sku: "HSEPS-CARRY-GR-MRS", 
-                title: "H-SUN EPS CARRY MRS GRN SOLAR ALUM", 
-                price: "$373.66", 
-                category: "Optics" 
+            {
+                sku: "HSEPS-CARRY-GR-MRS",
+                title: "H-SUN EPS CARRY MRS GRN SOLAR ALUM",
+                price: "$373.66",
+                category: "Optics"
             },
             { sku: "EO552", title: "EOTech, 552 Holo Sight", price: "$564.32", category: "Optics" },
             { sku: "HSAEMS-211301", title: "AEMS SOLAR RED", price: "$347.59", category: "Optics" },
@@ -493,8 +514,8 @@
                     <div class="product-card" onclick="window.location.href='product-detail.html?sku=${p.sku}'">
                         <span class="stock-badge">IN STOCK</span>
                         <div class="product-img-box">
-                            <img src="${imgSrc}" 
-                                   alt="${p.title}" 
+                            <img src="${imgSrc}"
+                                   alt="${p.title}"
                                    onerror="this.src='https://placehold.co/250x200/121824/ffffff?text=Montgomery+Arms';">
                         </div>
                         <span class="sku-label">SKU: ${p.sku}</span>
@@ -513,7 +534,7 @@
         // Catalog search filtering
         document.getElementById('catalog-search').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = products.filter(p => 
+            const filtered = products.filter(p =>
                 p.title.toLowerCase().includes(term) || p.sku.toLowerCase().includes(term)
             );
             renderProducts(filtered);
@@ -523,6 +544,7 @@
         renderProducts(products);
 
         // --- COMPLETE CART & CHECKOUT LOGIC ---
+        
         let cart = JSON.parse(localStorage.getItem('montgomery_cart')) || [];
         const cartModal = document.getElementById('cart-modal');
         const cartButton = document.getElementById('cart-button');
@@ -562,30 +584,30 @@
             }
         }
 
-        // Attached to window so inline HTML buttons can trigger them
-        window.removeFromCart = function(index) {
+        function removeFromCart(index) {
             cart.splice(index, 1);
             saveCart();
             updateCartBadge();
             renderCartItems();
-        };
+        }
 
-        window.updateQuantity = function(index, delta) {
+        function updateQuantity(index, delta) {
             cart[index].quantity += delta;
             if (cart[index].quantity <= 0) {
-                window.removeFromCart(index);
+                removeFromCart(index);
             } else {
                 saveCart();
                 updateCartBadge();
                 renderCartItems();
             }
-        };
+        }
 
         function renderCartItems() {
             if (!cartItemsContainer) return;
+            cartItemsContainer.innerHTML = '';
             
             if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<p style="color: #9ca3af;">Your loadout is empty.</p>';
+                cartItemsContainer.innerHTML = '<p>Your loadout is empty.</p>';
                 if (cartTotalPrice) cartTotalPrice.textContent = '0.00';
                 if (checkoutBtn) checkoutBtn.disabled = true;
                 return;
@@ -593,66 +615,54 @@
 
             if (checkoutBtn) checkoutBtn.disabled = false;
             let totalCost = 0;
-            let html = '';
             
             cart.forEach((item, index) => {
-                // Ensure price is calculated correctly whether it has a $ sign or is a raw number
-                let priceVal = typeof item.price === 'string' ? parseFloat(item.price.replace('$', '')) : (item.price || 0);
-                let itemTotal = priceVal * item.quantity;
+                const itemTotal = item.price * item.quantity;
                 totalCost += itemTotal;
 
-                html += `
-                    <div class="cart-item">
-                        <div class="item-details">
-                            <strong>${item.name || item.title || item.sku || "Product"}</strong> <br>
-                            <span style="font-size: 0.85rem; color: #9ca3af;">$${priceVal.toFixed(2)} / ea</span>
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('cart-item');
+                
+                itemElement.innerHTML = `
+                    <div class="item-details">
+                        <strong>${item.name || item.title}</strong> <br>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">$${item.price.toFixed(2)} / ea</span>
+                    </div>
+                    <div class="item-actions">
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                            <span class="qty-display">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
                         </div>
-                        <div class="item-actions">
-                            <div class="qty-controls">
-                                <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
-                                <span class="qty-display">${item.quantity}</span>
-                                <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
-                            </div>
-                            <span style="min-width: 70px; text-align: right; font-weight: bold; color: #f4f5f7;">$${itemTotal.toFixed(2)}</span>
-                            <button class="remove-btn" onclick="removeFromCart(${index})" title="Remove Item">✕</button>
-                        </div>
+                        <span style="min-width: 70px; text-align: right; font-weight: bold; color: var(--text-light);">$${itemTotal.toFixed(2)}</span>
+                        <button class="remove-btn" onclick="removeFromCart(${index})" title="Remove Item">✕</button>
                     </div>
                 `;
+                cartItemsContainer.appendChild(itemElement);
             });
 
-            cartItemsContainer.innerHTML = html;
             if (cartTotalPrice) cartTotalPrice.textContent = totalCost.toFixed(2);
         }
 
         if (checkoutBtn) {
             checkoutBtn.addEventListener('click', () => {
                 if (cart.length === 0) return;
-                // Redirects to checkout page instead of popping an alert
-                window.location.href = 'checkout.html';
+                
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const totalValue = cartTotalPrice.textContent;
+                
+                alert(`Checkout successful!\n\nProcessing ${totalItems} item(s) for a total of $${totalValue}.`);
+                
+                cart = [];
+                saveCart();
+                updateCartBadge();
+                renderCartItems();
+                cartModal.classList.remove('show-modal');
             });
         }
 
         // Initialize cart badge on load
         updateCartBadge();
     </script>
-
-    <!-- Cart Modal Display Panel -->
-    <div id="cart-modal" class="cart-modal hidden">
-        <div class="cart-content">
-            <span class="close-cart" id="close-cart">&times;</span>
-            <h2>Your Shopping Cart</h2>
-            
-            <div id="cart-items-container">
-                <!-- JavaScript will inject items here -->
-                <p>Your cart is empty.</p>
-            </div>
-            
-            <div class="cart-total">
-                <strong>Total: $<span id="cart-total-price">0.00</span></strong>
-            </div>
-            
-            <button id="checkout-btn">Proceed to Checkout</button>
-        </div>
-    </div>
 </body>
 </html>
