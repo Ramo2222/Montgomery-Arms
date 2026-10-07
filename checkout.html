@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout - Montgomery Arms</title>
+<style>
+:root{--bg:#0b0e14;--card:#121824;--panel:#1a2130;--gold:#dfb260;--gold-h:#f3c272;--text:#f4f5f7;--muted:#9ca3af;--line:rgba(223,178,96,.25)}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif}
+body{background:var(--bg);color:var(--text)}
+header{background:#080a0f;border-bottom:1px solid var(--line);padding:12px 30px}
+.logo{font-size:1.3rem;font-weight:800;color:var(--gold);text-decoration:none;letter-spacing:2px}
+main{max-width:1100px;margin:40px auto;padding:0 20px}
+h1{color:var(--gold);font-size:1.8rem;margin-bottom:24px}
+.layout{display:grid;grid-template-columns:1.5fr 1fr;gap:30px;align-items:start}
+@media(max-width:850px){.layout{grid-template-columns:1fr}}
+fieldset{border:1px solid var(--line);border-radius:8px;background:var(--card);padding:20px;margin-bottom:20px}
+legend{padding:0 8px;color:var(--gold);font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:5px}
+input,select{width:100%;padding:11px;background:var(--bg);color:var(--text);border:1px solid #333;border-radius:4px;font-size:.95rem}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;color:var(--text)}.check input{width:auto;margin-top:3px}
+.summary{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px;position:sticky;top:20px}
+.summary h2{font-size:1.1rem;margin-bottom:14px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;font-size:.9rem;border-bottom:1px solid #2a3441}
+.row small{color:var(--muted)}
+.tot{display:flex;justify-content:space-between;font-size:1.3rem;font-weight:700;color:var(--gold);margin:16px 0}
+button.go{width:100%;padding:14px;background:var(--gold);color:var(--bg);border:0;border-radius:4px;font-weight:800;font-size:1rem;cursor:pointer}
+button.go:hover{background:var(--gold-h)}
+.msg{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:6px;font-size:.88rem;color:var(--muted);display:none}
+.empty{text-align:center;padding:60px 0;color:var(--muted)}.empty a{color:var(--gold)}
+a.back{color:var(--muted);text-decoration:none;font-size:.9rem;display:inline-block;margin-bottom:16px}a.back:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+<header><a href="index.html" class="logo">MONTGOMERY ARMS</a></header>
+<main>
+  <a href="index.html" class="back">&larr; Continue shopping</a>
+  <h1>Checkout</h1>
+  <div id="empty" class="empty" hidden>Your cart is empty. <a href="index.html">Browse the catalog</a></div>
+  <form id="co" class="layout" novalidate>
+    <div>
+      <fieldset><legend>Contact</legend><div class="grid">
+        <div class="full"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        <div class="full"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" required></div>
+      </div></fieldset>
+      <fieldset><legend>Shipping address</legend><div class="grid">
+        <div><label for="fn">First name</label><input id="fn" name="fn" autocomplete="given-name" required></div>
+        <div><label for="ln">Last name</label><input id="ln" name="ln" autocomplete="family-name" required></div>
+        <div class="full"><label for="a1">Address</label><input id="a1" name="a1" autocomplete="address-line1" required></div>
+        <div class="full"><label for="a2">Apartment, suite (optional)</label><input id="a2" name="a2" autocomplete="address-line2"></div>
+        <div><label for="city">City</label><input id="city" name="city" autocomplete="address-level2" required></div>
+        <div><label for="state">State</label><input id="state" name="state" autocomplete="address-level1" maxlength="2" required></div>
+        <div><label for="zip">ZIP code</label><input id="zip" name="zip" autocomplete="postal-code" inputmode="numeric" required></div>
+      </div></fieldset>
+      <fieldset><legend>Confirmation</legend>
+        <label class="check"><input type="checkbox" id="age" required> I am 21 or older and legally allowed to buy these items where I live.</label>
+      </fieldset>
+    </div>
+    <aside class="summary">
+      <h2>Order summary</h2>
+      <div id="lines"></div>
+      <div class="tot"><span>Subtotal</span><span id="sub">$0.00</span></div>
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px">Tax and shipping are added once payment is connected.</p>
+      <button class="go" type="submit">Continue to payment</button>
+      <div class="msg" id="msg" role="status"></div>
+    </aside>
+  </form>
+</main>
+<script src="products.js"></script>
+<script src="cart.js"></script>
+<script>
+const money = n => '$' + n.toFixed(2);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const form = document.getElementById('co'), msg = document.getElementById('msg');
+
+function show() {
+  const lines = Cart.lines();
+  document.getElementById('empty').hidden = lines.length > 0;
+  form.hidden = lines.length === 0;
+  document.getElementById('lines').innerHTML = lines.map(l =>
+    `<div class="row"><span>${esc(l.product.title)}<br><small>Qty ${l.quantity} &times; ${money(l.unit)}</small></span><strong>${money(l.line)}</strong></div>`).join('');
+  document.getElementById('sub').textContent = money(Cart.total());
+}
+
+// Hook for your payment provider (Stripe Checkout, Authorize.net, etc.).
+// Receives the validated order. Replace the body when you connect a backend.
+function startPayment(order) {
+  sessionStorage.setItem('montgomery_order_draft', JSON.stringify(order));
+  msg.style.display = 'block';
+  msg.textContent = 'Your details are saved, but payment is not connected yet, so no order has been placed.';
+}
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  if (!form.checkValidity()) { form.reportValidity(); return; }
+  const customer = Object.fromEntries(new FormData(form));
+  startPayment({ customer, items: Cart.lines().map(l => ({ sku: l.sku, quantity: l.quantity, unit: l.unit })), subtotal: Cart.total() });
+});
+show();
+window.addEventListener('storage', show);
+</script>
+</body>
+</html>

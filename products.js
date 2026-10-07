@@ -1,47 +1,14 @@
-const products = [
-    {
-        sku: "HSEPS-CARRY-GR-MRS",
-        title: "Holosun EPS Carry Series, 2MOA, 6MOA, 32 MOA Circle 2 MOA Dot Options - Green",
-        price: 429.99,
-        image: "https://placehold.co/500x500/ffffff/000000?text=EPS+CARRY",
-        description: "Enclosed handgun sight designed for narrower, subcompact handguns with Super LED and Solar Failsafe.",
-        specs: {
-            Brand: "Holosun",
-            Color: "Green Reticle",
-            Style: "Multi-Reticle (MRS)",
-            Dimensions: "1.62 x 1.07 x 0.95 inches",
-            Weight: "1 Ounce",
-            Material: "7075 T6 Aluminum"
-        }
-    },
-    {
-        sku: "HS507K-X2",
-        title: "Holosun HS507K-X2 Classic Multi Reticle Red Dot Sight",
-        price: 295.99,
-        image: "https://placehold.co/500x500/ffffff/000000?text=HS507K-X2",
-        description: "Open reflex optical sight designed for subcompact concealed carry pistols.",
-        specs: {
-            Brand: "Holosun",
-            Color: "Red Reticle",
-            Style: "Multi-Reticle",
-            Dimensions: "1.6 x 0.98 x 0.95 inches",
-            Weight: "1 Ounce",
-            Material: "7075 T6 Aluminum"
-        }
-    },
-    {
-        sku: "VORTEX-DEF-ST",
-        title: "Vortex Defender-ST Micro Dot Sight with Auto-Shutoff",
-        price: 299.00,
-        image: "https://placehold.co/500x500/ffffff/000000?text=Vortex+Defender",
-        description: "Built for duty and everyday carry with motion activation and shock-resistant design.",
-        specs: {
-            Brand: "Vortex Optics",
-            Color: "Red Reticle",
-            Style: "4 MOA Dot",
-            Dimensions: "1.63 x 1.05 x 1.1 inches",
-            Weight: "1.4 Ounces",
-            Material: "Aluminum"
-        }
-    }
+// SINGLE source of truth for the catalog. Every page loads this file.
+// Prices are numbers. Images default to images/<sku>/000001.jpg if no `image` is set.
+window.products = [
+  { sku: "CMMG22BA6AE", title: "CMMG, AR Conversion Kit, 22LR", price: 183.94, category: "Accessories",
+    image: "https://cmmg.com/media/catalog/product/2/2/22ba6ae_1.jpg" },
+  { sku: "HSEPS-CARRY-GR-MRS", title: "H-SUN EPS CARRY MRS GRN SOLAR ALUM", price: 373.66, category: "Optics" },
+  { sku: "EO552", title: "EOTech, 552 Holo Sight", price: 564.32, category: "Optics" },
+  { sku: "HSAEMS-211301", title: "AEMS SOLAR RED", price: 347.59, category: "Optics" },
+  { sku: "HSAEMS-PRO-X2-RD", title: "Holosun Technologies, AEMS X2 Pro, Red Dot", price: 347.59, category: "Optics" },
+  { sku: "HSARO-GD2", title: "H-SUN ARO ENCLOSED GLD 2MOA SIGHT", price: 121.43, category: "Optics" },
+  { sku: "HSARO-GR2", title: "H-SUN ARO ENCLOSED GRN 2MOA SIGHT", price: 129.02, category: "Optics" },
+  { sku: "MGMPI233BLK", title: "MAGPUL PMAG M3 5.56 40RD BLK", price: 17.02, category: "Magazines" },
+  { sku: "SFM340C-BK-PRO", title: "SUREFIRE M340C SCOUT PRO 500 LUM BLK", price: 255.64, category: "Lights" }
 ];
