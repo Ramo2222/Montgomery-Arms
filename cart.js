@@ -68,6 +68,7 @@
 .ma-note{font-size:.78rem;color:#9ca3af;margin-bottom:14px}\
 .ma-checkout{display:block;text-align:center;background:#dfb260;color:#0b0e14;font-weight:800;padding:13px;border-radius:4px;text-decoration:none}\
 .ma-checkout:hover{background:#f3c272}.ma-checkout.is-disabled{background:#333;color:#777;pointer-events:none}\
+.ma-drawer,.ma-drawer *{font-family:"Segoe UI",Tahoma,sans-serif}\
 .ma-open{overflow:hidden}';
 
   function build() {
